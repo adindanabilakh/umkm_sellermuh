@@ -1,9 +1,30 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 const umkmData = [
-  { id: 1, name: "Warung Sate Madura", owner: "Pak Slamet", category: "Food", revenue: "$2,500", status: "Active" },
-  { id: 2, name: "Batik Pekalongan", owner: "Ibu Siti", category: "Textile", revenue: "$3,800", status: "Active" },
+  {
+    id: 1,
+    name: "Warung Sate Madura",
+    owner: "Pak Slamet",
+    category: "Food",
+    revenue: "$2,500",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Batik Pekalongan",
+    owner: "Ibu Siti",
+    category: "Textile",
+    revenue: "$3,800",
+    status: "Active",
+  },
   {
     id: 3,
     name: "Toko Elektronik Jaya",
@@ -20,8 +41,15 @@ const umkmData = [
     revenue: "$1,900",
     status: "Active",
   },
-  { id: 5, name: "Kopi Gayo Aceh", owner: "Aminah", category: "Food & Beverage", revenue: "$3,100", status: "Active" },
-]
+  {
+    id: 5,
+    name: "Kopi Gayo Aceh",
+    owner: "Aminah",
+    category: "Food & Beverage",
+    revenue: "$3,100",
+    status: "Active",
+  },
+];
 
 export function UMKMTable() {
   return (
@@ -46,13 +74,16 @@ export function UMKMTable() {
               <TableCell>{umkm.category}</TableCell>
               <TableCell>{umkm.revenue}</TableCell>
               <TableCell>
-                <Badge variant={umkm.status === "Active" ? "success" : "destructive"}>{umkm.status}</Badge>
+                <Badge
+                  variant={umkm.status === "Active" ? "default" : "destructive"}
+                >
+                  {umkm.status}
+                </Badge>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
-

@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps, CartesianGrid } from "recharts"
 
 const data = [
   { name: "Jan", total: 4500, newCustomers: 120, avgOrderValue: 37.5 },
@@ -18,19 +18,20 @@ const data = [
   { name: "Dec", total: 10000, newCustomers: 350, avgOrderValue: 28.6 },
 ]
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
+  if (active && payload?.length) {
     return (
       <div className="bg-background border rounded p-2 shadow-lg">
         <p className="font-bold">{label}</p>
-        <p className="text-sm">Revenue: ${payload[0].value.toLocaleString()}</p>
-        <p className="text-sm">New Customers: {payload[0].payload.newCustomers}</p>
-        <p className="text-sm">Avg Order Value: ${payload[0].payload.avgOrderValue.toFixed(2)}</p>
+        <p className="text-sm">Revenue: ${payload[0].value?.toLocaleString()}</p>
+        <p className="text-sm">New Customers: {payload[0].payload?.newCustomers}</p>
+        <p className="text-sm">Avg Order Value: ${payload[0].payload?.avgOrderValue?.toFixed(2)}</p>
       </div>
-    )
+    );
   }
-  return null
-}
+  return null;
+};
+
 
 export function RevenueChart() {
   return (

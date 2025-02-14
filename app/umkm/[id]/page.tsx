@@ -1,8 +1,12 @@
+"use client";
+import { useParams } from "next/navigation";
 import { UMKMDetailForm } from "@/components/umkm-detail-form";
 
-export default function UMKMDetailPage({ params }: { params: { id: string } }) {
+export default function UMKMDetailPage() {
+  const params = useParams<{ id: string }>();
+
   if (!params?.id) {
-    throw new Error("Invalid params: ID is missing.");
+    return <div>Error: Invalid ID</div>; // Bisa ganti dengan UI khusus
   }
 
   const umkmData = {
@@ -20,7 +24,6 @@ export default function UMKMDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">UMKM Details</h1>
-      {/* Kirimkan umkmData sebagai props ke Client Component */}
       <UMKMDetailForm umkmData={umkmData} />
     </div>
   );

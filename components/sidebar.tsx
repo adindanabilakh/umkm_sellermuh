@@ -11,7 +11,13 @@ const menuItems = [
   { icon: UserPlus, label: "Register", href: "/register" },
 ]
 
-export function Sidebar({ open, setOpen }) {
+interface SidebarProps {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}
+
+export function Sidebar({ open, setOpen }: SidebarProps) {
+
   return (
     <>
       <motion.div

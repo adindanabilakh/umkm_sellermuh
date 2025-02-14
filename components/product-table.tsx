@@ -7,6 +7,14 @@ import { PlusCircle, Edit, Trash2 } from "lucide-react"
 import { AddProductForm } from "./add-product-form"
 import { Modal } from "./ui/modal"
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+}
+
+
 const initialProducts = [
   { id: 1, name: "Batik Shirt", description: "Handmade batik shirt with traditional patterns", price: 250000 },
   { id: 2, name: "Wooden Carving", description: "Intricate wooden carving of Balinese scenery", price: 500000 },
@@ -19,10 +27,11 @@ export function ProductTable() {
   const [products, setProducts] = useState(initialProducts)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const addProduct = (newProduct) => {
-    setProducts([...products, { ...newProduct, id: products.length + 1 }])
-    setIsModalOpen(false)
-  }
+  const addProduct = (newProduct: Omit<Product, "id">) => {
+    setProducts([...products, { ...newProduct, id: products.length + 1 }]);
+    setIsModalOpen(false);
+  };
+  
 
   const deleteProduct = (id: number) => {
     setProducts(products.filter((product) => product.id !== id))

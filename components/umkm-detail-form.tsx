@@ -28,7 +28,7 @@ export function UMKMDetailForm({
       name: "",
       description: "",
       location: "",
-      mapUrl: "https://www.google.com/maps/embed?...",
+      mapUrl: "https://www.google.com/maps/embed?...", // ✅ Pastikan ini ada
       phoneNumber: "",
       openingHours: "",
       closingHours: "",
@@ -101,15 +101,19 @@ export function UMKMDetailForm({
                 />
               </div>
               <div className="aspect-video">
-                <iframe
-                  src={watch("mapUrl")}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
+                {watch("mapUrl") ? (
+                  <iframe
+                    src={watch("mapUrl")}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                ) : (
+                  <p className="text-red-500">No map available</p>
+                )}
               </div>
             </CardContent>
           </Card>
