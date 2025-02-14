@@ -1,19 +1,12 @@
 import { UMKMDetailForm } from "@/components/umkm-detail-form";
 
-export default async function UMKMDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  // Tunggu params jika memang async
-  const resolvedParams = await params;
-
-  if (!resolvedParams?.id) {
+export default function UMKMDetailPage({ params }: { params: { id: string } }) {
+  if (!params?.id) {
     throw new Error("Invalid params: ID is missing.");
   }
 
   const umkmData = {
-    id: resolvedParams.id,
+    id: params.id,
     name: "Sample UMKM",
     description: "This is a sample UMKM description.",
     location: "123 Main St, City, Country",
@@ -27,6 +20,7 @@ export default async function UMKMDetailPage({
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">UMKM Details</h1>
+      {/* Kirimkan umkmData sebagai props ke Client Component */}
       <UMKMDetailForm umkmData={umkmData} />
     </div>
   );
