@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
@@ -21,7 +21,7 @@ interface LoginFormData {
   password: string;
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const {
     register,
     handleSubmit,
@@ -31,10 +31,14 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [pendingApproval, setPendingApproval] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams(); // ✅ Tangkap query parameter dari URL
+  const searchParams = useSearchParams(); // ✅ Pindahkan ini ke dalam Suspense jika dipakai langsung
 
   useEffect(() => {
-    if (searchParams.get("pending") === "true") {
+    // ✅ Pastikan hanya dipanggil setelah komponen telah di-mount
+    if (
+      typeof window !== "undefined" &&
+      searchParams.get("pending") === "true"
+    ) {
       setPendingApproval(true);
     }
   }, [searchParams]);
@@ -164,5 +168,14 @@ export default function LoginPage() {
         </div>
       )}
     </>
+  );
+}
+
+// 🔥 Bungkus `LoginForm` dalam Suspense untuk mengatasi error
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <LoginForm />
+    </Suspense>
   );
 }
