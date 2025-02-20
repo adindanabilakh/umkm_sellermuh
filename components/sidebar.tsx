@@ -4,11 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, Home, FileText, LogOut } from "lucide-react";
-
-const menuItems = [
-  { icon: Home, label: "Dashboard", href: "/dashboard" },
-  { icon: FileText, label: "UMKM Details", href: "/umkm/1" },
-];
+import { useEffect, useState } from "react";
 
 // ✅ Tambahkan Tipe Props
 interface SidebarProps {
@@ -18,6 +14,28 @@ interface SidebarProps {
 
 export function Sidebar({ open, setOpen }: SidebarProps) {
   const router = useRouter();
+  const [umkmId, setUmkmId] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const storedUmkm = localStorage.getItem("umkm");
+      if (storedUmkm) {
+        const parsedUmkm = JSON.parse(storedUmkm);
+        if (parsedUmkm?.id) {
+          setUmkmId(parsedUmkm.id.toString()); // Pastikan ID disimpan sebagai string
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing UMKM data:", error);
+    }
+  }, []);
+
+  const menuItems = [
+    { icon: Home, label: "Dashboard", href: "/dashboard" },
+    ...(umkmId
+      ? [{ icon: FileText, label: "UMKM Details", href: `/umkm/${umkmId}` }]
+      : []), // 🔥 Jika `umkmId` belum ada, jangan tampilkan UMKM Details
+  ];
 
   const handleLogout = async () => {
     try {

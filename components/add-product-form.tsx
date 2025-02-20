@@ -23,10 +23,29 @@ export function AddProductForm({ onAdd, onCancel }: AddProductFormProps) {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    watch,
   } = useForm<ProductFormData>();
 
+  // Fungsi format Rupiah untuk tampilan saja
+  const formatRupiah = (value: string) => {
+    return value
+      .replace(/\D/g, "") // Hanya angka
+      .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Tambahkan titik pemisah ribuan
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\D/g, ""); // Hanya angka
+    setValue("price", rawValue ? parseInt(rawValue, 10) : 0); // Simpan sebagai number
+  };
+
+  const priceValue = watch("price", 0); // Ambil nilai asli angka
+
   const onSubmit = (data: ProductFormData) => {
-    onAdd(data);
+    onAdd({
+      ...data,
+      price: Number(data.price), // Pastikan harga dikirim sebagai angka
+    });
     reset();
   };
 
@@ -56,13 +75,15 @@ export function AddProductForm({ onAdd, onCancel }: AddProductFormProps) {
         <Label htmlFor="price">Price (IDR)</Label>
         <Input
           id="price"
-          type="number"
-          {...register("price", { required: "Price is required", min: 0 })}
+          type="text"
+          onChange={handlePriceChange}
+          value={priceValue ? `Rp. ${formatRupiah(priceValue.toString())}` : ""}
         />
         {errors.price && (
           <p className="text-sm text-red-500">{errors.price.message}</p>
         )}
       </div>
+
       <div className="flex justify-end space-x-2">
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel

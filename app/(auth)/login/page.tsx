@@ -75,8 +75,13 @@ function LoginForm() {
         throw new Error(result.message || "Login gagal. Coba lagi.");
       }
 
+      // ✅ Simpan token ke localStorage dan Cookies
+      localStorage.setItem("token", result.token);
       Cookies.set("token", result.token, { expires: 7 });
+
+      // ✅ Simpan data UMKM untuk akses selanjutnya
       localStorage.setItem("umkm", JSON.stringify(result.umkm));
+
       router.push("/dashboard");
     } catch (error: any) {
       setErrorMessage(error.message);
