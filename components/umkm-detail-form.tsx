@@ -389,11 +389,10 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
                     <Input
                       id="location_url"
                       {...register("location_url", {
-                        required: "Google Maps URL is required",
+                        required: "Google Maps Embed URL is required",
                         pattern: {
-                          value:
-                            /^https:\/\/goo\.gl\/maps\/.+|^https:\/\/www\.google\.com\/maps\/.+/i,
-                          message: "Invalid Google Maps URL",
+                          value: /^<iframe.+<\/iframe>$/i, // Hanya menerima iframe
+                          message: "Only Google Maps embed iframe is allowed",
                         },
                       })}
                       aria-invalid={errors.location_url ? "true" : "false"}
@@ -402,6 +401,18 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
                       <span className="text-red-500 text-sm">
                         {errors.location_url.message}
                       </span>
+                    )}
+                    {watch("location_url") && (
+                      <div className="mt-4">
+                        <h4 className="font-semibold mb-2">
+                          Google Maps Preview:
+                        </h4>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: watch("location_url"),
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
                   <div>
