@@ -25,13 +25,24 @@ interface UMKM {
 }
 
 export default function Dashboard() {
-  // ✅ Ambil data UMKM dari localStorage
-  const umkmData = localStorage.getItem("umkm");
-  const umkm = umkmData ? JSON.parse(umkmData) : null;
-  const umkmId = umkm?.id;
-
   const [umkmDetails, setUmkmDetails] = useState<UMKM | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [umkmId, setUmkmId] = useState<number | null>(null);
+
+  // ✅ Ambil data UMKM dari localStorage **hanya di client**
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const umkmData = localStorage.getItem("umkm");
+      if (umkmData) {
+        try {
+          const parsedUMKM = JSON.parse(umkmData);
+          setUmkmId(parsedUMKM.id); // ✅ Set umkmId setelah parsing
+        } catch (error) {
+          console.error("Error parsing UMKM data:", error);
+        }
+      }
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -47,8 +58,10 @@ export default function Dashboard() {
       }
     }
 
-    fetchData();
-  }, [umkmId]); // ✅ Pastikan hanya fetch jika umkmId tersedia
+    if (umkmId) {
+      fetchData();
+    }
+  }, [umkmId]); // ✅ Jalankan fetch hanya jika umkmId tersedia
 
   if (isLoading) {
     return <div className="text-center p-6">Loading...</div>;

@@ -10,8 +10,12 @@ export default function UMKMDetailPage() {
   const [umkmData, setUmkmData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const formatTime = (time: string) => {
+    if (!time) return "Unknown";
+    return time.slice(0, 5); // ✅ Ambil hanya HH:MM tanpa :00 di belakang
+  };
+
   useEffect(() => {
-    // Fetch UMKM data yang sedang login
     const fetchUMKM = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -22,7 +26,11 @@ export default function UMKMDetailPage() {
         });
 
         if (res.data?.id) {
-          setUmkmData(res.data);
+          setUmkmData({
+            ...res.data,
+            open_time: formatTime(res.data.open_time), // ✅ Format waktu 24 jam
+            close_time: formatTime(res.data.close_time), // ✅ Format waktu 24 jam
+          });
         } else {
           console.error("UMKM data tidak ditemukan:", res.data);
         }
