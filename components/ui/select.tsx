@@ -16,13 +16,10 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className
         )}
         ref={ref}
-        value={value} // Gunakan value untuk state terkontrol
+        value={value}
         onChange={(e) => onValueChange(e.target.value)}
         {...props}
       >
-        <option value="" disabled>
-          Select an option
-        </option>
         {options.map((option, index) => (
           <option key={index} value={option.value}>
             {option.label}
@@ -32,7 +29,52 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     );
   }
 );
-
 Select.displayName = "Select";
 
-export { Select };
+const SelectTrigger = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => <div className={cn("relative w-full", className)}>{children}</div>;
+
+const SelectContent = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={cn(
+      "absolute mt-1 bg-white border rounded-md shadow-md",
+      className
+    )}
+  >
+    {children}
+  </div>
+);
+
+const SelectItem = ({
+  value,
+  onSelect,
+  children,
+}: {
+  value: string;
+  onSelect: (value: string) => void;
+  children: React.ReactNode;
+}) => (
+  <div
+    className="p-2 hover:bg-gray-100 cursor-pointer"
+    onClick={() => onSelect(value)}
+  >
+    {children}
+  </div>
+);
+
+const SelectValue = ({ value }: { value: string }) => (
+  <span className="block truncate">{value}</span>
+);
+
+export { Select, SelectTrigger, SelectContent, SelectItem, SelectValue };

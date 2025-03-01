@@ -54,11 +54,12 @@ export default function Dashboard() {
         className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
       >
         {/* 🔥 Ambil jumlah produk dari UMKM */}
+        {/* ✅ Pastikan jumlah produk benar-benar dihitung */}
         <MetricCard
           title="Total Products"
-          value={umkm.products?.length || 0}
+          value={umkm.products ? umkm.products.length : 0}
           icon="Package"
-          change={5.7}
+          change={umkm.products ? umkm.products.length : 0}
         />
 
         {/* 🔥 Hitung Monthly Revenue dari Annual Revenue (jika ada) */}

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, Home, FileText, LogOut } from "lucide-react";
+import { ChevronLeft, Home, FileText, LogOut, DollarSign } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // ✅ Tambahkan Tipe Props
@@ -35,6 +35,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
     ...(umkmId
       ? [{ icon: FileText, label: "UMKM Details", href: `/umkm/${umkmId}` }]
       : []), // 🔥 Jika `umkmId` belum ada, jangan tampilkan UMKM Details
+    { icon: DollarSign, label: "Income Management", href: "/income" },
   ];
 
   const handleLogout = async () => {
