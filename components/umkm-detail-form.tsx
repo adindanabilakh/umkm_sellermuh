@@ -37,6 +37,7 @@ interface UMKMFormData {
   password?: string;
   document?: FileList; // 🆕 Tetap gunakan untuk document
   images?: FileList; // 🆕 Tambahkan untuk multi-image UMKM
+  description?: string; // 🔥 Tambahkan description opsional
 }
 
 function TutorialDialog({ umkmData }: { umkmData?: UMKMFormData }) {
@@ -221,6 +222,7 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
       formData.append("address", data.address);
       formData.append("location_url", data.location_url);
       formData.append("email", data.email);
+      formData.append("description", data.description || "");
 
       if (data.phone_number) {
         formData.append("phone_number", data.phone_number);
@@ -277,6 +279,9 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
   useEffect(() => {
     if (umkmData) {
       setValue("phone_number", umkmData.phone_number ?? "", {
+        shouldDirty: false,
+      });
+      setValue("description", umkmData.description ?? "", {
         shouldDirty: false,
       });
 
@@ -345,6 +350,17 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
                       </span>
                     )}
                   </div>
+                  <div>
+                    <Label htmlFor="description">Description</Label>
+                    <textarea
+                      id="description"
+                      {...register("description")}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      rows={3}
+                      placeholder="Enter a brief description of the UMKM"
+                    />
+                  </div>
+
                   <div>
                     <Label htmlFor="phone_number">Phone Number</Label>
                     <Input
