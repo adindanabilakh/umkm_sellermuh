@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 interface RegisterFormData {
   name: string;
@@ -28,6 +29,8 @@ interface RegisterFormData {
 }
 
 export default function RegisterPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -166,13 +169,16 @@ export default function RegisterPage() {
           </div>
           {/* 🆕 Input Upload File */}
           <div>
-            <Label htmlFor="document">Upload Document (optional)</Label>
+            <Label htmlFor="document">Upload Document</Label>
             <Input
               id="document"
               type="file"
               accept=".pdf,.png,.jpg,.jpeg"
               {...register("document")}
             />
+            <span className="text-xs font-light text-sky-500">
+              Upload foto sertifikat atau foto gerobak
+            </span>
           </div>
           <div className="hidden">
             <Label htmlFor="location_url">Location URL</Label>
@@ -194,25 +200,40 @@ export default function RegisterPage() {
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
           </div>
-          <div>
+          <div className="relative">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register("password", {
                 required: "Password is required",
-                minLength: 6,
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
               })}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-[70%] transform -translate-y-1/2 text-gray-500"
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
             {errors.password && (
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
-          <div>
+
+          <div className="relative">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
               id="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               {...register("confirmPassword", {
                 required: "Please confirm your password",
                 validate: (val: string) => {
@@ -222,6 +243,17 @@ export default function RegisterPage() {
                 },
               })}
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-[70%] transform -translate-y-1/2 text-gray-500"
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
             {errors.confirmPassword && (
               <p className="text-sm text-red-500">
                 {errors.confirmPassword.message}

@@ -11,7 +11,6 @@ import axios from "axios";
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
-// ✅ Tambahkan interface untuk tipe data UMKM
 interface UMKM {
   id: number;
   name: string;
@@ -26,23 +25,37 @@ interface UMKM {
 }
 
 export default function Dashboard() {
-  const [umkm, setUmkm] = useState<UMKM | null>(null); // ✅ Fix TypeScript
+  // ✅ Ambil data UMKM dari localStorage
+  const umkmData = localStorage.getItem("umkm");
+  const umkm = umkmData ? JSON.parse(umkmData) : null;
+  const umkmId = umkm?.id;
+
+  const [umkmDetails, setUmkmDetails] = useState<UMKM | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
+      if (!umkmId) return;
+
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/umkms/1`); // Ganti dengan ID dinamis jika perlu
-        setUmkm(res.data);
+        const res = await axios.get(`${API_BASE_URL}/api/umkms/${umkmId}`);
+        setUmkmDetails(res.data);
       } catch (error) {
         console.error("Error fetching UMKM details:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+  }, [umkmId]); // ✅ Pastikan hanya fetch jika umkmId tersedia
 
-  if (!umkm) {
+  if (isLoading) {
     return <div className="text-center p-6">Loading...</div>;
+  }
+
+  if (!umkmDetails) {
+    return <div className="text-center p-6 text-red-500">UMKM Not Found</div>;
   }
 
   return (
@@ -53,39 +66,23 @@ export default function Dashboard() {
         transition={{ duration: 0.5 }}
         className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
       >
-        {/* 🔥 Ambil jumlah produk dari UMKM */}
-        {/* ✅ Pastikan jumlah produk benar-benar dihitung */}
         <MetricCard
           title="Total Products"
-          value={umkm.products ? umkm.products.length : 0}
+          value={umkmDetails.products ? umkmDetails.products.length : 0}
           icon="Package"
-          change={umkm.products ? umkm.products.length : 0}
+          change={umkmDetails.products ? umkmDetails.products.length : 0}
         />
 
-        {/* 🔥 Hitung Monthly Revenue dari Annual Revenue (jika ada) */}
-        {/* <MetricCard
-          title="Monthly Revenue"
-          value={
-            umkm.annual_revenue
-              ? `Rp ${(umkm.annual_revenue / 12).toLocaleString("id-ID")}`
-              : "Rp 0"
-          }
-          icon="DollarSign"
-          change={-2.3}
-        /> */}
-
-        {/* 🔥 Status UMKM sebagai gantinya */}
         <MetricCard
           title="UMKM Status"
-          value={umkm.status || "Pending"}
+          value={umkmDetails.status || "Pending"}
           icon="Info"
           change={0}
         />
 
-        {/* 🔥 Ganti dengan alamat UMKM */}
         <MetricCard
           title="Location"
-          value={umkm.address || "Unknown"}
+          value={umkmDetails.address || "Unknown"}
           icon="MapPin"
           change={0}
         />

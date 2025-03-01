@@ -38,6 +38,8 @@ interface UMKMFormData {
   document?: FileList; // 🆕 Tetap gunakan untuk document
   images?: FileList; // 🆕 Tambahkan untuk multi-image UMKM
   description?: string; // 🔥 Tambahkan description opsional
+  open_time: "";
+  close_time: "";
 }
 
 function TutorialDialog({ umkmData }: { umkmData?: UMKMFormData }) {
@@ -223,6 +225,8 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
       formData.append("location_url", data.location_url);
       formData.append("email", data.email);
       formData.append("description", data.description || "");
+      formData.append("open_time", data.open_time); // ✅ Kirim jam buka
+      formData.append("close_time", data.close_time); // ✅ Kirim jam tutup
 
       if (data.phone_number) {
         formData.append("phone_number", data.phone_number);
@@ -282,6 +286,14 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
         shouldDirty: false,
       });
       setValue("description", umkmData.description ?? "", {
+        shouldDirty: false,
+      });
+
+      setValue("open_time", umkmData.open_time ?? "", {
+        shouldDirty: false,
+      });
+
+      setValue("close_time", umkmData.close_time ?? "", {
         shouldDirty: false,
       });
 
@@ -397,6 +409,48 @@ export function UMKMDetailForm({ umkmData }: { umkmData?: UMKMFormData }) {
                       </span>
                     )}
                   </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="open_time">Opening Time</Label>
+                      <Input
+                        id="open_time"
+                        type="time"
+                        {...register("open_time", {
+                          required: "Opening time is required",
+                        })}
+                      />
+                      {errors.open_time && (
+                        <span className="text-red-500 text-sm">
+                          {errors.open_time.message}
+                        </span>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="close_time">Closing Time</Label>
+                      <Input
+                        id="close_time"
+                        type="time"
+                        {...register("close_time", {
+                          required: "Closing time is required",
+                          validate: (value) => {
+                            if (
+                              watch("open_time") &&
+                              value <= watch("open_time")
+                            ) {
+                              return "Closing time must be after opening time";
+                            }
+                          },
+                        })}
+                      />
+                      {errors.close_time && (
+                        <span className="text-red-500 text-sm">
+                          {errors.close_time.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <Label htmlFor="location_url">Google Maps URL</Label>

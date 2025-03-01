@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon,Package, DollarSign, Info, MapPin } from "lucide-react";
 import * as Icons from "lucide-react";
 
 interface MetricCardProps {
