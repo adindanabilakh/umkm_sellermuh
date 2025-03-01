@@ -81,7 +81,13 @@ const CustomActiveDot: React.FC<CustomDotProps> = ({ cx, cy, payload }) => {
       <foreignObject x={cx! - 100} y={cy! - 120} width={200} height={100}>
         <div className="bg-black/80 p-4 rounded-lg shadow-lg border border-gray-800 text-white">
           <p className="font-bold text-lg">{payload.month}</p>
-          <p className="text-green-400">Income: ${payload.amount.toFixed(2)}</p>
+          <p className="text-green-400">
+            Income:{" "}
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            }).format(payload.amount)}
+          </p>
         </div>
       </foreignObject>
     </g>
@@ -197,9 +203,11 @@ export function IncomeOverview({
               Total Income
             </h3>
             <div className="flex items-center">
-              <DollarSign className="mr-2 h-6 w-6 text-green-400" />
               <span className="text-2xl font-bold">
-                $<AnimatedNumber value={totalIncome} />
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(totalIncome)}
               </span>
             </div>
           </motion.div>

@@ -115,7 +115,13 @@ export function IncomeTable({
                   : "Invalid Date"}
               </TableCell>
 
-              <TableCell>${Number(entry.amount).toFixed(2)}</TableCell>
+              <TableCell>
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(entry.amount)}
+              </TableCell>
+
               <TableCell>{entry.source}</TableCell>
               <TableCell>{entry.notes}</TableCell>
               <TableCell>
