@@ -50,7 +50,7 @@ function LoginForm() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8080/api/umkm/login`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/umkm/login`,
         {
           method: "POST",
           headers: {
@@ -96,7 +96,7 @@ function LoginForm() {
         <CardHeader>
           <CardTitle>Login</CardTitle>
           <CardDescription>
-            Enter your credentials to access your account
+          Masukkan data akun Anda untuk mengakses akun Anda.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -135,9 +135,9 @@ function LoginForm() {
             </Button>
           </form>
           <p className="text-center mt-4">
-            Don't have an account?{" "}
+            Belum punya akun?{" "}
             <Link href="/register" className="text-primary hover:underline">
-              Register
+              Daftar sekarang.
             </Link>
           </p>
         </CardContent>
